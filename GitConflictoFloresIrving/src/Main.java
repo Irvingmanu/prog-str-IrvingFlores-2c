@@ -14,7 +14,6 @@ public class Main {
 
         System.out.printf("Total a pagar: %.2f%n", total);
     }
-
     /**
      * Metodo para pedir un double
      * @param scanner -> Previamente configurado para leer lo que ingrese el usuario
@@ -25,7 +24,6 @@ public class Main {
         System.out.print(mensaje);
         return scanner.nextDouble();
     }
-
     /**
      * Metodo para agregar el IVA al subtotal
      * @param subtotal -> Valor double ingresado por el usuario
