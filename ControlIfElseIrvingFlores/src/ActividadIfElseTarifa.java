@@ -10,7 +10,7 @@ public class ActividadIfElseTarifa {
 
         edad = pedirEdad(sc, "Ingresa tu edad: ");
         if (edad < 0 || edad > 120) {
-            System.out.println("Edad imválida");
+            System.out.println("Edad inválida");
         } else {
             estudianteOpcion = validarSiEsEstudiante(sc, "¿Eres estudiante? (si/no): ");
             if (estudianteOpcion.equals("si")) {
