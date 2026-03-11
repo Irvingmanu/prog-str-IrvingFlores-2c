@@ -12,6 +12,7 @@
             <Button mnemonicParsing="false" text="Recargar info" />
          </children>
       </HBox>
-      <ListView prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" />
+      <Label fx:id="Hello"
    </children>
 </VBox>

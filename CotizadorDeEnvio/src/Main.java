@@ -11,14 +11,11 @@ public class Main {
         int distanciaKm = leerIntEnRango("Ingresa la distancia en un rango de (1-2000): ", sc, 1, 2000);
         int tipoServicio = leerIntEnRango("Ingresa el tipo de servicio 1)Estandar 2)Express: ", sc, 1, 2);
         boolean esZonaRemota = leerBoolean("¿Es zona remota? (Ingrese false o true): ", sc);
-
         //Process
         shippingCalculator.process(pesoKg, distanciaKm, tipoServicio, esZonaRemota);
-
         //Output
         imprimirTicket(pesoKg, distanciaKm, tipoServicio, esZonaRemota, shippingCalculator.subtotal, shippingCalculator.iva, shippingCalculator.total);
     }
-
 
     public static double leerDoubleEnRango(String msg, Scanner sc, double min, double max) {
         double entrada;
@@ -81,7 +78,7 @@ public class Main {
         System.out.println("Distancia: " + distanciakm + "Km");
         System.out.println("Zona remota: " + esZonaRemota);
         System.out.println("Subtotal: " + subtotal);
-        System.out.printf("IVA: %.2f" , iva);
+        System.out.printf("IVA: %.2f", iva);
         System.out.println("\nTotal: " + total);
         System.out.println("---- TICKET ----");
     }
