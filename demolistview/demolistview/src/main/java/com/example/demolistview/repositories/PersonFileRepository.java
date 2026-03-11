@@ -14,6 +14,9 @@ public class PersonFileRepository {
 
     private void ensureFileExist() throws IOException {
         if (Files.notExists(filePath)) {
+            // Esta línea asegura que la carpeta 'data' exista antes de crear el archivo
+            Files.createDirectories(filePath.getParent());
+            // Ahora sí, crea el archivo
             Files.createFile(filePath);
         }
     }
