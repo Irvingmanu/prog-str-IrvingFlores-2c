@@ -20,8 +20,10 @@ public class AppController {
 
     @FXML
     private TextField txtName;
+
     @FXML
     private TextField txtEmail;
+
     @FXML
     private TextField txtEdad;
 
@@ -31,30 +33,76 @@ public class AppController {
     @FXML
     public void initialize(){
         listView.setItems(data);
+        listView.getSelectionModel().selectedItemProperty().addListener(
+                (obs,oldValue,newValue) ->{
+                    if (newValue!=null){
+                    String[] parts = newValue.split("-"); //para separar las lineas del csv y editar los campos por separado
+                    txtName.setText(parts[0]);
+                    txtEmail.setText(parts[1]);
+                    txtEdad.setText(parts[2]);
+                    }
+                }
+        );
         loadFromFile();
     }
 
     @FXML
-    public void onAddPerson() {
-        try {
-            String name = txtName.getText();
+    public void onAddPerson(){
+       try {
+
+           String name = txtName.getText();
+           String email = txtEmail.getText();
+           String edad = txtEdad.getText();
+           service.addPerson(name,email,edad);
+           lblMsg.setText("Usuario creado correctamente!");
+           lblMsg.setStyle("-fx-text-fill: green");
+           txtName.clear();
+           txtEmail.clear();
+           txtEdad.clear();
+           loadFromFile();
+
+       }catch(IOException e){
+           lblMsg.setText("Es error de archivo"+ e.getMessage());
+           lblMsg.setStyle("-fx-text-fill: red");
+
+       }catch (IllegalArgumentException e){
+           lblMsg.setText("Es error de datos"+ e.getMessage());
+           lblMsg.setStyle("-fx-text-fill: red");
+
+       }
+
+    }
+
+    @FXML
+
+    public void onUpdate(){
+        try{
+            int index = listView.getSelectionModel().getSelectedIndex();
+            String nombre = txtName.getText();
             String email = txtEmail.getText();
             String edad = txtEdad.getText();
-            service.addPerson(name, email, edad);
-            lblMsg.setText("Usuario creado correctamente!");
-            lblMsg.setStyle("-fx-text-fill: green");
+            service.updatePerson(index, nombre, email, edad);
+            loadFromFile();
             txtName.clear();
             txtEmail.clear();
             txtEdad.clear();
-            loadFromFile();
+            lblMsg.setText("Se acutalizo el registro correctamente");
         } catch (IOException e) {
-            lblMsg.setText("Es error de archivo" + e.getMessage());
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Es error de datos: " + e.getMessage());
-            lblMsg.setStyle("-fx-text-fill: red");
+            lblMsg.setText("Hubo un error con el archivo");
+        }catch (IllegalArgumentException e ){
+            lblMsg.setText("Hubo un error con los datos"+e.getMessage());
         }
     }
+
+    public void onDelete() throws IOException {
+        int index = listView.getSelectionModel().getSelectedIndex();
+        String nombre = txtName.getText();
+        String email = txtEmail.getText();
+        String edad = txtEdad.getText();
+        service.deletePerson(index, nombre,email, edad);
+        loadFromFile();
+    }
+
     @FXML
     public void onReload(){
         loadFromFile();
