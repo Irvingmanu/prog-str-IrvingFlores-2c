@@ -26,7 +26,6 @@ public class PersonService {
     }
 
     public void updatePerson(int index, String nombre, String email, String edad) throws IOException {
-
         validate(nombre, email, edad);
         List<String> listaOriginal=repo.readAllLines();
         List<String> cleanLines = new ArrayList<>();

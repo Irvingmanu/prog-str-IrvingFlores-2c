@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.practicaexamen.controllers.AppController">
+
+    <Label text="Contactos de Emergencia" />
+
+    <HBox spacing="10.0">
+        <Label text="Nombre:" />
+        <TextField fx:id="txtNombre" />
+    </HBox>
+
+    <HBox spacing="10.0">
+        <Label text="Telefono:" />
+        <TextField fx:id="txtTelefono" />
+    </HBox>
+
+    <ComboBox promptText="Parentesco" fx:id="cmbParentesco" />
+
+    <HBox spacing="10.0">
+        <Button text="Agregar" onAction="#onAgregar" />
+        <Button text="Buscar" onAction="#onBuscar"/>
+        <Button text="Actualizar" onAction="#onActualizar"/>
+        <Button text="Eliminar" onAction="#onEliminar"/>
+        <Button text="Limpiar" onAction="#onLimpiar"/>
+    </HBox>
+
+    <ListView fx:id="lvContactos"/>
+    <Label fx:id="lblMsg" />
+
+
+</VBox>
