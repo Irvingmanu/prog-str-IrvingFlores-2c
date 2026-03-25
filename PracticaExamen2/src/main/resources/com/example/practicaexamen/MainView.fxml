@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="320.0" prefWidth="520.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.practicaexamen.controllers.MainController">
+
+    <children>
+        <Label layoutX="20" layoutY="10" text="Nombre"/>
+        <TextField fx:id="txtNombre" layoutX="20" layoutY="30" prefWidth="150"/>
+        <Label layoutX="20" layoutY="60" text="Teléfono"/>
+        <TextField fx:id="txtTelefono" layoutX="20" layoutY="80" prefWidth="150"/>
+        <Label layoutX="20" layoutY="110" text="Parentesco"/>
+        <ComboBox fx:id="cmbParentesco" layoutX="20" layoutY="130" prefWidth="150"/>
+        <Button text="Agregar" layoutX="20" layoutY="170" prefWidth="80" onAction="#onAdd"/>
+        <Button text="Buscar" layoutX="110" layoutY="170" prefWidth="80" onAction="#onSearch"/>
+        <Button text="Actualizar" layoutX="20" layoutY="210" prefWidth="80" onAction="#onUpdate"/>
+        <Button text="Eliminar" layoutX="110" layoutY="210" prefWidth="80" onAction="#onDelete"/>
+        <Button text="Limpiar" layoutX="65" layoutY="250" prefWidth="80" onAction="#onClear"/>
+        <ListView fx:id="listView" layoutX="220" layoutY="30" prefHeight="260" prefWidth="280"/>
+        <Label fx:id="lblMsg" layoutX="20" layoutY="290" prefWidth="480" text="Mensaje"/>
+
+    </children>
+</AnchorPane>
