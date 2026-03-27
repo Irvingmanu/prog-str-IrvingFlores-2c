@@ -1,54 +1,65 @@
 package com.example.practicaexamen.controllers;
 
-import com.example.practicaexamen.model.Contacto;
 import com.example.practicaexamen.services.ContactService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import java.util.List;
 
 public class AppController {
 
     @FXML
-    public void initialize() {
-        cmbParentesco.getItems().setAll(service.PARENTESCOS);
-    }
-
-    ContactService service = new ContactService();
-
-    @FXML
-    public Label lblMsg;
-    @FXML
-    private ListView<String> lvContactos;
-    @FXML
-    private ComboBox<String> cmbParentesco;
-    @FXML
     private TextField txtNombre;
     @FXML
     private TextField txtTelefono;
+    @FXML private
+    ComboBox<String> cmbParentesco;
+    @FXML
+    private ListView<String> listView;
+    @FXML
+    private Label lblMsg;
+
+    private final ObservableList<String> data = FXCollections.observableArrayList();
+
+    ContactService service = new ContactService();
+
+    String[] parentescos = {"Padre", "Madre", "Hermano", "Hermana", "Abuelo", "Abuela", "Tío", "Tía"};
+
+    @FXML
+    public void initialize() {
+        listView.setItems(data);
+
+        cmbParentesco.getItems().addAll(parentescos);
+
+        reload();
+
+        listView.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+            if (n != null) {
+                String[] p = n.split("-");
+                txtNombre.setText(p[0]);
+                txtTelefono.setText(p[1]);
+                cmbParentesco.setValue(p[2]);
+            }
+        });
+    }
 
     @FXML
     public void onAgregar() {
         try {
-            String nombre = txtNombre.getText();
-            String telefono = txtTelefono.getText();
-            String parentesco = cmbParentesco.getValue();
-
-            Contacto nuevoContacto = new Contacto(nombre, telefono, parentesco);
-            service.agregarContacto(nuevoContacto);
-
-            lblMsg.setText("Contacto agregado correctamente");
-            lblMsg.setStyle("-fx-text-fill: green");
-
-            limpiarCampos();
+            service.agregarContacto(txtNombre.getText(), txtTelefono.getText(), cmbParentesco.getValue());
             reload();
+            clear();
+            lblMsg.setText("Contacto aregado con éxito");
 
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Error de datos:" + e.getMessage());
-            lblMsg.setStyle("-fx-text-fill: red");
+        } catch (Exception e) {
+            lblMsg.setText(e.getMessage());
         }
     }
+
     @FXML
     public void onActualizar() {
         try {
@@ -56,61 +67,66 @@ public class AppController {
             String telefono = txtTelefono.getText();
             String parentesco = cmbParentesco.getValue();
 
-            Contacto nuevoContacto = new Contacto(nombre, telefono, parentesco);
-            service.actualizarContacto(nombre, nuevoContacto);
+            service.actualizarContacto(nombre, telefono, parentesco);
 
-            lblMsg.setText("contacto actualizado correctamente");
-            lblMsg.setStyle("-fx-text-fill: green");
-
-            limpiarCampos();
             reload();
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Error de datos: " + e.getMessage());
-            lblMsg.setStyle("-fx-text-fill: red");
-        }
+            clear();
+            lblMsg.setText("Contacto actualizado con exito");
 
-    }
-    @FXML
-    public void onBuscar() {
-        String nombreBuscado = txtNombre.getText();
-        Contacto contactoEncontrado = service.buscarContacto(nombreBuscado);
-
-        if (contactoEncontrado != null) {
-            txtTelefono.setText(contactoEncontrado.getTelefono());
-            cmbParentesco.setValue(contactoEncontrado.getParentesco());
-            lblMsg.setText("contacto encontrado");
-            lblMsg.setStyle("-fx-text-fill: green");
-        } else {
-            lblMsg.setText("El contacto no existe");
-            lblMsg.setStyle("-fx-text-fill: red");
+        } catch (Exception e) {
+            lblMsg.setText(e.getMessage());
         }
     }
+
     @FXML
     public void onEliminar() {
         try {
-            String nombreBuscado = txtNombre.getText();
-            service.eliminarContacto(nombreBuscado);
-            lblMsg.setText("contacto eliminado correctamente ");
-            lblMsg.setStyle("-fx-text-fill: green");
+            String nombre = txtNombre.getText();
 
-            limpiarCampos();
+            if (nombre.isBlank()) {
+                lblMsg.setText("No se ha escrito ningun nombre");
+                return;
+            }
+
+            service.eliminarContacto(nombre);
+
             reload();
+            clear();
+            lblMsg.setText("Contacto eliminado con éxito");
 
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Error: " + e.getMessage());
-            lblMsg.setStyle("-fx-text-fill: red");
+        } catch (Exception e) {
+            lblMsg.setText(e.getMessage());
+        }
+    }
+    @FXML
+    public void onBuscar() {
+        String nombre = txtNombre.getText();
 
+        var contacto = service.buscarContacto(nombre);
+
+        if (contacto != null) {
+            txtTelefono.setText(contacto.getTelefono());
+            cmbParentesco.setValue(contacto.getParentesco());
+            lblMsg.setText("contacto encontrado");
+        } else {
+            lblMsg.setText("Contacto no encontrado");
         }
     }
 
     @FXML
-    private void limpiarCampos() {
+    public void onLimpiar() {
+        clear();
+    }
+
+    private void reload() {
+        List<String> items = service.loadForListView();
+        data.setAll(items);
+    }
+
+    private void clear() {
         txtNombre.clear();
         txtTelefono.clear();
         cmbParentesco.setValue(null);
-    }
-
-    public void reload() {
-        lvContactos.getItems().setAll(service.loadForListView());
+        lblMsg.setText("");
     }
 }

@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.practicaexamen.controllers.AppController">
+<AnchorPane prefHeight="233.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.practicaexamen.controllers.AppController">
 
-    <Label text="Contactos de Emergencia" />
+    <children>
 
-    <HBox spacing="10.0">
-        <Label text="Nombre:" />
-        <TextField fx:id="txtNombre" />
-    </HBox>
+        <Label layoutX="20" layoutY="10" text="Nombre" />
+        <TextField fx:id="txtNombre" layoutX="20" layoutY="30" prefWidth="150" />
+        <Label layoutX="20" layoutY="60" text="Teléfono" />
+        <TextField fx:id="txtTelefono" layoutX="20" layoutY="80" prefWidth="150" />
+        <Label layoutX="20" layoutY="110" text="Parentesco" />
+        <ComboBox fx:id="cmbParentesco" layoutX="20" layoutY="130" prefWidth="150" />
 
-    <HBox spacing="10.0">
-        <Label text="Telefono:" />
-        <TextField fx:id="txtTelefono" />
-    </HBox>
+        <Button layoutX="20" layoutY="170" onAction="#onAgregar" prefWidth="80" text="Agregar" />
+        <Button layoutX="110" layoutY="170" onAction="#onBuscar" prefWidth="80" text="Buscar" />
+        <Button layoutX="205.0" layoutY="170.0" onAction="#onActualizar" prefWidth="80" text="Actualizar" />
+        <Button layoutX="302.0" layoutY="170.0" onAction="#onEliminar" prefWidth="80" text="Eliminar" />
+        <Button layoutX="407.0" layoutY="170.0" onAction="#onLimpiar" prefWidth="80" text="Limpiar" />
 
-    <ComboBox promptText="Parentesco" fx:id="cmbParentesco" />
+        <ListView fx:id="listView" layoutX="220" layoutY="30" prefHeight="127.0" prefWidth="280" />
+        <Label fx:id="lblMsg" layoutX="20.0" layoutY="202.0" prefWidth="480" text="Mensaje" />
 
-    <HBox spacing="10.0">
-        <Button text="Agregar" onAction="#onAgregar" />
-        <Button text="Buscar" onAction="#onBuscar"/>
-        <Button text="Actualizar" onAction="#onActualizar"/>
-        <Button text="Eliminar" onAction="#onEliminar"/>
-        <Button text="Limpiar" onAction="#onLimpiar"/>
-    </HBox>
-
-    <ListView fx:id="lvContactos"/>
-    <Label fx:id="lblMsg" />
-
-
-</VBox>
+    </children>
+</AnchorPane>

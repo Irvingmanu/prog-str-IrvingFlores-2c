@@ -7,21 +7,53 @@ import java.util.List;
 
 public class ContactService {
 
-    List<Contacto> listaContactos = new ArrayList<>();
+    private List<Contacto> lista = new ArrayList<>();
 
-    public void agregarContacto(Contacto nuevoContacto){
-        validate(nuevoContacto.getNombre(), nuevoContacto.getTelefono(), nuevoContacto.getParentesco());
-        Contacto contactoExistente = buscarContacto(nuevoContacto.getNombre());
-
-        if (contactoExistente != null){
-            throw new IllegalArgumentException("El contacto ya existe");
+    public List<String> loadForListView(){
+        List<String> result = new ArrayList<>();
+        for (Contacto contacto : lista){
+            result.add(contacto.getNombre() + "-" + contacto.getTelefono() + "-" + contacto.getParentesco());
         }
+        return result;
+    }
 
-        listaContactos.add(nuevoContacto);
+    public void agregarContacto(String nombre, String telefono, String parentesco){
+        validar(nombre, telefono, parentesco);
+
+        for (Contacto contacto : lista){
+            if (contacto.getNombre().equalsIgnoreCase(nombre)){
+                throw new IllegalArgumentException("El nombre esta repetido");
+            }
+        }
+        lista.add(new Contacto(nombre, telefono, parentesco));
+    }
+
+    public void actualizarContacto(String nombre, String telefono, String parentesco){
+        validar(nombre, telefono, parentesco);
+
+        Contacto contactoAActualizar = buscarContacto(nombre);
+
+        if (contactoAActualizar != null){
+            contactoAActualizar.setTelefono(telefono);
+            contactoAActualizar.setParentesco(parentesco);
+        } else {
+            throw new IllegalArgumentException("Contacto no encontrado para actualizar");
+        }
+    }
+
+    public void eliminarContacto(String nombreBuscado){
+
+        Contacto contactoAEliminar = buscarContacto(nombreBuscado);
+
+        if (contactoAEliminar != null){
+            lista.remove(contactoAEliminar);
+        } else {
+            throw new IllegalArgumentException("Contacto no encontrado para eliminar");
+        }
     }
 
     public Contacto buscarContacto(String contactoBuscado){
-        for (Contacto contactoActual : listaContactos){
+        for (Contacto contactoActual : lista){
             if (contactoBuscado.equals(contactoActual.getNombre())){
                 return contactoActual;
             }
@@ -29,67 +61,21 @@ public class ContactService {
         return null;
     }
 
-    public void eliminarContacto(String nombreBuscado){
-        Contacto contactoAEliminar = buscarContacto(nombreBuscado);
-        if (contactoAEliminar != null){
-            listaContactos.remove(contactoAEliminar);
-        }
-    }
-
-    public void actualizarContacto(String nombre, Contacto nuevoContacto){
-        String nombreLimpio = (nuevoContacto.getNombre() == null) ? "" : nuevoContacto.getNombre().trim();
-        nuevoContacto.setNombre(nombreLimpio);
-        String telefonoLimpio = (nuevoContacto.getTelefono() == null) ? "" : nuevoContacto.getTelefono().trim();
-        nuevoContacto.setTelefono(telefonoLimpio);
-        String parentescoLimpio = (nuevoContacto.getParentesco() == null) ? "" : nuevoContacto.getParentesco().trim();
-        nuevoContacto.setParentesco(parentescoLimpio);
-
-        validate(nuevoContacto.getNombre(), nuevoContacto.getTelefono(), nuevoContacto.getParentesco());
-        Contacto contactoAActualizar = buscarContacto(nombre);
-
-        if (contactoAActualizar != null){
-            int posicion = listaContactos.indexOf(contactoAActualizar);
-            listaContactos.set(posicion, nuevoContacto);
-        }
-    }
-
-    public final String[] PARENTESCOS = {"Padre", "Madre", "Hermano", "Hermana", "Abuelo", "Abuela", "Tío", "Tía"};
-
-
-    private void validate(String nombre, String telefono, String parentesco){
-        nombre = (nombre == null) ? "" : nombre.trim();
-        telefono = (telefono == null) ? "" : telefono.trim();
-        parentesco = (parentesco == null) ? "" : parentesco.trim();
-
-        if(nombre.isBlank() || !nombre.matches("^[A-Za-z]+$") || nombre.length()<3){
-            throw new IllegalArgumentException("El nombre es incorrecto");
+    private void validar(String nombre, String telefono, String parentesco){
+        if (nombre == null || nombre.isBlank()){
+            throw new IllegalArgumentException("El nombre esta vacío");
         }
 
-        if (telefono.isBlank() || !telefono.matches("^[0-9]+$") || telefono.length()!=10 ){
-            throw new IllegalArgumentException("El telefono es incorrecto");
+        if (!nombre.matches("^[A-Za-z]+$")){
+            throw new IllegalArgumentException("Solo se permiten letras en el nombre");
         }
-        boolean encontrado = false;
 
-        for (String p : PARENTESCOS) {
-            if (p.equals(parentesco)) {
-                encontrado = true;
-                break;
-            }
+        if (telefono == null || !telefono.matches("^[0-9]{10}$")){
+            throw new IllegalArgumentException("El telefono solo debe contener numeros y debe tener 10");
         }
-        if (!encontrado) {
-            throw new IllegalArgumentException("El parentesco no es válido");
-        }
-    }
 
-    public List<String> loadForListView() {
-        List<String> listaFormateada = new ArrayList<>();
-        for (Contacto c : listaContactos) {
-            listaFormateada.add(c.getNombre() + " - " + c.getTelefono() + " (" + c.getParentesco() + ")");
+        if (parentesco == null || parentesco.isBlank()){
+            throw new IllegalArgumentException("El parentesco se ha seleccionado");
         }
-        return listaFormateada;
-    }
-
-    public List<Contacto> getListaContactos() {
-        return listaContactos;
     }
 }
